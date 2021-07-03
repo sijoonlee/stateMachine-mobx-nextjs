@@ -1,35 +1,13 @@
 import React from 'react'
-import Link from 'next/link'
-import { inject, observer } from 'mobx-react'
-import Clock from './Clock'
+import { observer } from 'mobx-react'
+import createStateMachine from '../function/createStateMachine'
 
-@inject('store')
-@observer
-class Page extends React.Component {
-  componentDidMount() {
-    this.props.store.start()
-  }
+const stateMachine = createStateMachine
 
-  componentWillUnmount() {
-    this.props.store.stop()
-  }
+const Page = () => {
+  return <div>
+    <button onClick={stateMachine.onEvent}>Click!</button>
 
-  render() {
-    return (
-      <div>
-        <h1>{this.props.title}</h1>
-        <Clock
-          timeString={this.props.store.timeString}
-          light={this.props.store.light}
-        />
-        <nav>
-          <Link href={this.props.linkTo}>
-            <a>Navigate</a>
-          </Link>
-        </nav>
-      </div>
-    )
-  }
+  </div>
 }
-
-export default Page
+export default observer(Page)

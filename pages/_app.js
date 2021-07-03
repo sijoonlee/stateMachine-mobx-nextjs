@@ -1,12 +1,12 @@
-import { Provider } from 'mobx-react'
+import { Provider, observer, useStaticRendering } from 'mobx-react'
 import { useStore } from '../store'
 
-export default function App({ Component, pageProps }) {
-  const store = useStore(pageProps.initialState)
+useStaticRendering(typeof window === 'undefined');
 
+function App({ Component, pageProps }) {
   return (
-    <Provider store={store}>
       <Component {...pageProps} />
-    </Provider>
   )
 }
+
+export default observer(App)
