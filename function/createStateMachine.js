@@ -4,11 +4,11 @@ import { observable, flow } from 'mobx'
 
 
 
-const scenario = {
+const scenario = observable({
     start : {
-        onEvent: function(userInput, context){
-            console.log("start event")
-            if(userInput == "perfect") {context.score = 100}
+        onEvent: function(userInput){
+            console.log("start event", userInput)
+            scenario.modelStore.score = userInput
         },
         next: "question1",
     },
@@ -24,26 +24,29 @@ const scenario = {
         },
         next: "start"
     },
-    context : {
-        score: 0,
-        pass: false,
-        justStart: true,
-    }
-}
+    modelStore:{
+        name: null,
+        email: null,
+    },
+    states:{
+        save: "READY",
+    },
+})
 
 
-// Define a couple models
 const self = observable({
     state: "start",
     scenario:scenario,
     start(){
         self.setState("start")
+       
     },
     setState(newState){
         self.state = newState
+        console.log("!!!",self.scenario.modelStore.score)
     },
     onEvent(event){
-        self.scenario[self.state].onEvent(event.value, self.scenario.context )
+        self.scenario[self.state].onEvent(event.target.value, self.scenario.context )
         self.goNext()
     },
     goNext(){
