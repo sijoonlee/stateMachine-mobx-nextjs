@@ -21,9 +21,8 @@ const createMachine = (list) => {
 }
 
 const Button = (props) => {
-  console.log(props.disabled)
-  const _handleClick = (event) => {
-    props?.onClick?.(event.target)
+  const _handleClick = (_) => {
+    props?.onClick?.()
   }
   return (
     <button
@@ -75,7 +74,7 @@ const PageTemplate = observer((props) => {
       {props.children.map((child)=> { 
         // override onChange
         const onChange = (value) => {
-            child.onChange?.(value)
+            child.props.onChange?.(value)
             machine.updateModelStore(child.props.id, value)
         }
         return React.cloneElement(child, { onChange })
@@ -100,6 +99,11 @@ const Page = () => {
     />
     <Question
       id="secondQuestion" 
+      title="Your Email"
+      onChange={console.log}
+    />
+        <Question
+      id="thirdQuestion" 
       title="Your Email"
       onChange={console.log}
     />
