@@ -3,7 +3,6 @@ import { observer } from 'mobx-react'
 import { observable, flow } from 'mobx'
 
 const createMachine = (list) => {
-
   const self = observable({
     modelStore: list.map(item => { return {id: item.id, value:null}}),
     savedState: "SAVED",
@@ -40,7 +39,6 @@ const Button = (props) => {
 const Question = (props) => {
   const _handleChange = (event) => {
     props?.onChange?.(event.target.value)
-    props.machine.updateModelStore(props.id, event.target.value)
   }
   return (
     <div id={props.id}>
@@ -67,13 +65,22 @@ const createList = (props) => {
   }
   return list
 }
+
 const PageTemplate = observer((props) => {
 
   const [ machine ]= useState(createMachine(createList(props)))
   
   return ( 
     <div>
-      {props.children.map((child)=> { return React.cloneElement(child, { machine })})}
+      {props.children.map((child)=> { 
+        // override onChange
+        const onChange = (value) => {
+            child.onChange?.(value)
+            machine.updateModelStore(child.props.id, value)
+        }
+        return React.cloneElement(child, { onChange })
+      })}
+
       <Button
         id="submit"
         title="Submit"
