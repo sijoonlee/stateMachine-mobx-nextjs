@@ -1,9 +1,9 @@
 import { observer } from 'mobx-react'
 
-import Page from '../components/Page'
+import Main from '../components/Main'
 
 function Index() {
-  return <Page title="Index Page"/>
+  return <Main />
 }
 
 export default observer(Index)
